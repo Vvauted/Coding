@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <queue>
+#define Maxn 10005
+#define maxm 1000000
+#define inf  0x7FFFFFFF
+using namespace std;
+struct edge{
+	int to,next,val;
+}e[maxm];
+int head[Maxn],cnt;
+inline void add(int u,int v,int w)
+{
+	e[++cnt].to=v;
+	e[cnt].val=w;
+	e[cnt].next=head[u];
+	head[u]=cnt;
+}
+int dis[Maxn+5];
+bool vis[Maxn+5];
+void spfa(int s)
+{
+	for(int i=1;i<=Maxn;i++) {
+	dis[i]=inf;vis[i]=0;}
+	queue<int>q;
+	dis[s]=0;
+	vis[s]=1;
+	q.push(s);
+	while(!q.empty())
+	{
+		int t=q.front();
+		q.pop();
+		vis[t]=0;
+		for(int i=head[t];i;i=e[i].next)
+		{
+			int v=e[i].to;
+			if(dis[v]>dis[t]+e[i].val)
+			{
+			  dis[v]=dis[t]+e[i].val;
+				if(vis[v]==0)
+				{
+					q.push(v);
+					vis[v]=1;
+				}
+			}
+		}
+    	
+	}
+}
+int main()
+{
+	int n,m,s;
+	scanf("%d%d%d",&n,&m,&s);
+	for(int i=1;i<=m;i++)
+	{
+		int u,v,w;
+		scanf("%d%d%d",&u,&v,&w);
+		add(u,v,w);
+	}
+	spfa(s);
+	for(int i=1;i<=n;i++)
+	 printf("%d ",dis[i]);
+	return 0;
+} 
+
